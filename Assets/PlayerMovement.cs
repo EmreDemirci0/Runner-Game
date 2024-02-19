@@ -1,6 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
-
+using DG.Tweening;
 public class PlayerMovement : MonoBehaviour
 {
     #region Fields
@@ -43,6 +43,9 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
+    int value;
+    public float lerpingDuration = 0.5f; // Lerpleme süresi
+
     #region Methods
     /// <summary>
     /// Singleton atamalari yapilan kisim
@@ -74,27 +77,66 @@ public class PlayerMovement : MonoBehaviour
     {
         Jump();
 
+
         Movement();
 
 
-
     }
-    
+   
     /// <summary>
     /// Karaterin hareket methodu
     /// </summary>
     void Movement()
     {
-        //// Saða sola hareket
-        //float moveInput = Input.GetAxis("Horizontal");
-        ////rb.velocity = new Vector3(moveInput * moveSpeed, rb.velocity.y, moveInput);
+     
+        // Saða sola hareket
+        //LERPLE
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (value != -1)
+            {
+                value--;
+            }
+
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (value != 1)
+            {
+                value++;
+            }
+
+        }
+
+        if (value == -1)
+        {
+            this.transform.position = new Vector3(2, transform.position.y, transform.position.z);
+          
+        }
+        else if (value == 0)
+        {
+            this.transform.position = new Vector3(5, transform.position.y, transform.position.z);
+           
+
+        }
+        else if (value == 1)
+        {
+            this.transform.position = new Vector3(8, transform.position.y, transform.position.z);
+            
+
+        }
+
+
         //rb.AddForce(new Vector3(moveInput * moveSpeed, rb.velocity.y, moveInput));
 
 
-        rb.velocity = new Vector3(0f, rb.velocity.y, moveSpeed); // Yatay ve dikey hareketleri sýfýrlayarak sadece z ekseninde hareket saðlýyoruz.
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, moveSpeed); // Yatay ve dikey hareketleri sýfýrlayarak sadece z ekseninde hareket saðlýyoruz.
+
+
+
 
     }
-
+ 
     /// <summary>
     /// Karaterin ziplama methodu
     /// </summary>
