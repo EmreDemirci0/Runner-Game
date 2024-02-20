@@ -44,8 +44,8 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     int value;
-    public float lerpingDuration = 0.5f; // Lerpleme süresi
-
+    public float lerpingDuration = 0.2f; // Lerpleme süresi
+    public Animator anim;
     #region Methods
     /// <summary>
     /// Singleton atamalari yapilan kisim
@@ -82,72 +82,62 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
-   
+
     /// <summary>
     /// Karaterin hareket methodu
     /// </summary>
     void Movement()
     {
-     
         // Saða sola hareket
-        //LERPLE
         if (Input.GetKeyDown(KeyCode.A))
         {
-            if (value != -1)
-            {
-                value--;
-            }
-
+            value = Mathf.Clamp(value - 1, -1, 1); // value'yi -1 ile 1 arasýnda tutar
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            if (value != 1)
-            {
-                value++;
-            }
-
+            value = Mathf.Clamp(value + 1, -1, 1); // value'yi -1 ile 1 arasýnda tutar
         }
-
-        if (value == -1)
+        else if (Input.GetKeyDown(KeyCode.S))
         {
-            this.transform.position = new Vector3(2, transform.position.y, transform.position.z);
-          
+            anim.SetTrigger("isSlide");
         }
-        else if (value == 0)
+
+        // Hedef pozisyonu belirle
+        Vector3 targetPosition = Vector3.zero;
+        switch (value)
         {
-            this.transform.position = new Vector3(5, transform.position.y, transform.position.z);
-           
-
+            case -1:
+                targetPosition = new Vector3(2, transform.position.y, transform.position.z);
+                break;
+            case 0:
+                targetPosition = new Vector3(5, transform.position.y, transform.position.z);
+                break;
+            case 1:
+                targetPosition = new Vector3(8, transform.position.y, transform.position.z);
+                break;
         }
-        else if (value == 1)
-        {
-            this.transform.position = new Vector3(8, transform.position.y, transform.position.z);
-            
 
-        }
+        // Yumuþak geçiþ için Lerp fonksiyonunu kullanarak yeni pozisyonu belirle
+        transform.position = Vector3.Lerp(transform.position, targetPosition, lerpingDuration * Time.deltaTime);
 
-
-        //rb.AddForce(new Vector3(moveInput * moveSpeed, rb.velocity.y, moveInput));
-
-
-        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, moveSpeed); // Yatay ve dikey hareketleri sýfýrlayarak sadece z ekseninde hareket saðlýyoruz.
-
-
-
-
+        // Yatay ve dikey hareketleri sýfýrlayarak sadece z ekseninde hareket saðlýyoruz.
+        rb.velocity = new Vector3(0, rb.velocity.y, moveSpeed);
     }
- 
+
+
     /// <summary>
     /// Karaterin ziplama methodu
     /// </summary>
     void Jump()
     {
         // Yerde olup olmadýðýmýzý kontrol etmek için bir raycast kullanarak groundCheck noktasýndan yere doðru bir çizgi çekiyoruz.
-        isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, 1f, groundLayer);
+        isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, .3f, groundLayer);
 
         // Zýplama
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
+            print("s");
+            anim.SetTrigger("isJump");
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
         }
     }
