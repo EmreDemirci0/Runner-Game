@@ -41,11 +41,24 @@ public class PlayerMovement : MonoBehaviour
     public/**/ bool isGrounded;
 
 
+   
+    /// <summary>
+    /// Playerin sagda mi ortada mi sol da mi oldugunu tutan degisken
+    /// </summary>
+    int value;
+
+    /// <summary>
+    /// Playerin saga sola giderkenki lerp degeri
+    /// </summary>
+    public float lerpingDuration = 0.2f; // Lerpleme süresi
+
+    /// <summary>
+    /// Playerin animasyonu
+    /// </summary>
+    [SerializeField] Animator anim;
     #endregion
 
-    int value;
-    public float lerpingDuration = 0.2f; // Lerpleme süresi
-    public Animator anim;
+
     #region Methods
     /// <summary>
     /// Singleton atamalari yapilan kisim
@@ -67,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-       
+       anim=GetComponent<Animator>();
     }
    
     /// <summary>

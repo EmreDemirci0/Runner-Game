@@ -44,7 +44,7 @@ public class EternalFloor : MonoBehaviour
         objectZvalue = ObjectPool.Instance.objectPrefab.transform.GetChild(0).localScale.z;
         UpdateSpawnInternalValue();
         SpawnInitialObjects(); // Tüm yollarý baþlangýçta yerleþtir
-        Invoke("WaitForSpawnInitialObjects", spawnInterval);
+        Invoke("WaitForSpawnInitialObjects", spawnInterval+ 5.06f);
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ public class EternalFloor : MonoBehaviour
     /// </summary>
     void SpawnInitialObjects()
     {
-        float totalZOffset = 0;
+        float totalZOffset = objectZvalue * 5;
 
         for (int i = 0; i < ObjectPool.Instance.poolSize; i++)
         {

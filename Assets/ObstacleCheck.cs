@@ -4,11 +4,44 @@ using UnityEngine;
 
 public class ObstacleCheck : MonoBehaviour
 {
-    [SerializeField] Transform playerTopTransform;
-    [SerializeField] Transform playerBottomTransform;
-    public float rayLength = 10f; // Iþýnýn uzunluðu
+    #region Fields
 
+    /// <summary>
+    /// Playerin ust kismini tutan transform
+    /// </summary>
+    [SerializeField] Transform playerTopTransform;
+
+    /// <summary>
+    /// Playerin alt kismini tutan transform
+    /// </summary>
+    [SerializeField] Transform playerBottomTransform;
+
+    /// <summary>
+    /// Olmesi icin engele ne kadar yakin olmasi gerektigini ayarlatan uzaklik degeri (Iþýnýn uzunluðu)
+    /// </summary>
+    public float rayLength = .10f;
+
+    /// <summary>
+    /// Olmesi icin engel layeri
+    /// </summary>
+    public LayerMask layerMask;
+    #endregion
+
+
+    #region Methods
+
+    /// <summary>
+    /// Olum kontrolu ve islemleri yapan Update methodu
+    /// </summary>
     void Update()
+    {
+        RayCastOperations();
+    }
+   
+    /// <summary>
+    /// Karakterin onune,sag ve soluna ray atip olup olmediginin kontrolunu yapan method
+    /// </summary>
+    void RayCastOperations()
     {
         // Iþýn baþlangýç noktasý ve yönü için deðiþkenler
         Vector3 rayOrigin;
@@ -21,38 +54,65 @@ public class ObstacleCheck : MonoBehaviour
         rayOrigin = playerTopTransform.position;
         rayDirection = playerTopTransform.forward;
 
-        // Iþýný çizdir ve bir nesne ile çarpýþýrsa bilgiyi hit deðiþkenine atar
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayLength))
-        {
-            // Eðer ýþýn bir nesne ile çarpýþýrsa, o noktaya bir küre çizdir
-            Debug.DrawRay(rayOrigin, rayDirection * hit.distance, Color.red);
-            print("Öldün");
-            Time.timeScale = 0.001f;
-            return; // Çarpýþma algýlandýysa diðer ray kontrolüne gerek yok
-        }
-        else
-        {
-            // Eðer ýþýn bir nesne ile çarpýþmazsa, ýþýný uzunluðu kadar çizdir
-            Debug.DrawRay(rayOrigin, rayDirection * rayLength, Color.green);
-        }
+        // Öne doðru ýþýn atýþý
+        CastRay(rayOrigin, rayDirection, rayLength);
+
+        // Saða doðru ýþýn atýþý
+        rayDirection = playerTopTransform.right;
+        CastRay(rayOrigin, rayDirection, rayLength);
+
+        // Sola doðru ýþýn atýþý
+        rayDirection = -playerTopTransform.right;
+        CastRay(rayOrigin, rayDirection, rayLength);
 
         // Alt oyuncu transformu için rayOrigin ve rayDirection ayarlamalarý
         rayOrigin = playerBottomTransform.position;
         rayDirection = playerBottomTransform.forward;
 
+        // Öne doðru ýþýn atýþý
+        CastRay(rayOrigin, rayDirection, rayLength);
+
+        // Saða doðru ýþýn atýþý
+        rayDirection = playerBottomTransform.right;
+        CastRay(rayOrigin, rayDirection, rayLength);
+
+        // Sola doðru ýþýn atýþý
+        rayDirection = -playerBottomTransform.right;
+        CastRay(rayOrigin, rayDirection, rayLength);
+    }
+    
+    /// <summary>
+    /// Ray Control methodu
+    /// </summary>
+    /// <param name="origin"> Baslangic Noktasi </param>
+    /// <param name="direction"> Yonu </param>
+    /// <param name="maxDistance"> Uzakligi </param>
+    void CastRay(Vector3 origin, Vector3 direction, float maxDistance)
+    {
+        RaycastHit hit;
+
         // Iþýný çizdir ve bir nesne ile çarpýþýrsa bilgiyi hit deðiþkenine atar
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, rayLength))
+        if (Physics.Raycast(origin, direction, out hit, maxDistance,layerMask))
         {
             // Eðer ýþýn bir nesne ile çarpýþýrsa, o noktaya bir küre çizdir
-            Debug.DrawRay(rayOrigin, rayDirection * hit.distance, Color.red);
-            print("Öldün");
-            Time.timeScale = 0.001f;
+            Debug.DrawRay(origin, direction * hit.distance, Color.red);
+            PlayerDead();
         }
         else
         {
             // Eðer ýþýn bir nesne ile çarpýþmazsa, ýþýný uzunluðu kadar çizdir
-            Debug.DrawRay(rayOrigin, rayDirection * rayLength, Color.green);
+            Debug.DrawRay(origin, direction * maxDistance, Color.green);
         }
     }
-
+  
+    /// <summary>
+    /// Player olunce calisan method
+    /// </summary>
+    private void PlayerDead()
+    {
+        print("Öldün");
+        Time.timeScale = 0.001f;
+    }
+    
+    #endregion
 }
