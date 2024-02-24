@@ -17,7 +17,7 @@ public class ObstacleCheck : MonoBehaviour
     [SerializeField] Transform playerBottomTransform;
 
     /// <summary>
-    /// Olmesi icin engele ne kadar yakin olmasi gerektigini ayarlatan uzaklik degeri (Iþýnýn uzunluðu)
+    /// Olmesi icin engele ne kadar yakin olmasi gerektigini ayarlatan uzaklik degeri (Isinin uzunlugu)
     /// </summary>
     public float rayLength = .10f;
 
@@ -43,40 +43,30 @@ public class ObstacleCheck : MonoBehaviour
     /// </summary>
     void RayCastOperations()
     {
-        // Iþýn baþlangýç noktasý ve yönü için deðiþkenler
         Vector3 rayOrigin;
         Vector3 rayDirection;
 
-        // Iþýný çizimi için hit deðiþkeni
         RaycastHit hit;
 
-        // Üst oyuncu transformu için rayOrigin ve rayDirection ayarlamalarý
         rayOrigin = playerTopTransform.position;
         rayDirection = playerTopTransform.forward;
 
-        // Öne doðru ýþýn atýþý
         CastRay(rayOrigin, rayDirection, rayLength);
 
-        // Saða doðru ýþýn atýþý
         rayDirection = playerTopTransform.right;
         CastRay(rayOrigin, rayDirection, rayLength);
 
-        // Sola doðru ýþýn atýþý
         rayDirection = -playerTopTransform.right;
         CastRay(rayOrigin, rayDirection, rayLength);
 
-        // Alt oyuncu transformu için rayOrigin ve rayDirection ayarlamalarý
         rayOrigin = playerBottomTransform.position;
         rayDirection = playerBottomTransform.forward;
 
-        // Öne doðru ýþýn atýþý
         CastRay(rayOrigin, rayDirection, rayLength);
 
-        // Saða doðru ýþýn atýþý
         rayDirection = playerBottomTransform.right;
         CastRay(rayOrigin, rayDirection, rayLength);
 
-        // Sola doðru ýþýn atýþý
         rayDirection = -playerBottomTransform.right;
         CastRay(rayOrigin, rayDirection, rayLength);
     }
@@ -91,16 +81,13 @@ public class ObstacleCheck : MonoBehaviour
     {
         RaycastHit hit;
 
-        // Iþýný çizdir ve bir nesne ile çarpýþýrsa bilgiyi hit deðiþkenine atar
         if (Physics.Raycast(origin, direction, out hit, maxDistance,layerMask))
         {
-            // Eðer ýþýn bir nesne ile çarpýþýrsa, o noktaya bir küre çizdir
             Debug.DrawRay(origin, direction * hit.distance, Color.red);
             PlayerDead();
         }
         else
         {
-            // Eðer ýþýn bir nesne ile çarpýþmazsa, ýþýný uzunluðu kadar çizdir
             Debug.DrawRay(origin, direction * maxDistance, Color.green);
         }
     }
@@ -110,8 +97,7 @@ public class ObstacleCheck : MonoBehaviour
     /// </summary>
     private void PlayerDead()
     {
-        print("Öldün");
-        Time.timeScale = 0.001f;
+        GameHandler.Instance.isDead = true;
     }
     
     #endregion

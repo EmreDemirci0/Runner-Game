@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Playerin hizi, 3 ila 15 arasinda deger aliyor.
     /// </summary>
-    [Range(3f, 15f)] public float moveSpeed = 5f;
+    [Range(5f, 20f)] public float moveSpeed = 5f;
 
     /// <summary>
     /// Playerin Ziplama hizi
@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 10f;
 
     /// <summary>
-    /// Karakterin ziplamasi için Karakterin alt kisminin transformu
+    /// Karakterin ziplamasi icin Karakterin alt kisminin transformu
     /// </summary>
     public Transform groundCheck;
 
@@ -38,10 +38,13 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Karakterin Yerde mi Kontrolu
     /// </summary>
-    public/**/ bool isGrounded;
+    bool isGrounded;
 
+    /// <summary>
+    /// Karakterin Yerde mi Kontrolu icin uzaklik degeri
+    /// </summary>
+    public float jumpIsGroundedCheckDistance = .3f;
 
-   
     /// <summary>
     /// Playerin sagda mi ortada mi sol da mi oldugunu tutan degisken
     /// </summary>
@@ -55,11 +58,12 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Playerin animasyonu
     /// </summary>
-    [SerializeField] Animator anim;
+    Animator anim;
     #endregion
 
 
     #region Methods
+
     /// <summary>
     /// Singleton atamalari yapilan kisim
     /// </summary>
@@ -80,20 +84,16 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-       anim=GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
-   
+
     /// <summary>
     /// Ziplama ve Hareket icin Update Methodu
     /// </summary>
     void Update()
     {
         Jump();
-
-
         Movement();
-
-
     }
 
     /// <summary>
@@ -101,21 +101,19 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void Movement()
     {
-        // Saða sola hareket
         if (Input.GetKeyDown(KeyCode.A))
         {
-            value = Mathf.Clamp(value - 1, -1, 1); // value'yi -1 ile 1 arasýnda tutar
+            value = Mathf.Clamp(value - 1, -1, 1); // value'yi -1 ile 1 arasinda tutar
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            value = Mathf.Clamp(value + 1, -1, 1); // value'yi -1 ile 1 arasýnda tutar
+            value = Mathf.Clamp(value + 1, -1, 1); // value'yi -1 ile 1 arasinda tutar
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             anim.SetTrigger("isSlide");
         }
 
-        // Hedef pozisyonu belirle
         Vector3 targetPosition = Vector3.zero;
         switch (value)
         {
@@ -130,10 +128,8 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
 
-        // Yumuþak geçiþ için Lerp fonksiyonunu kullanarak yeni pozisyonu belirle
         transform.position = Vector3.Lerp(transform.position, targetPosition, lerpingDuration * Time.deltaTime);
 
-        // Yatay ve dikey hareketleri sýfýrlayarak sadece z ekseninde hareket saðlýyoruz.
         rb.velocity = new Vector3(0, rb.velocity.y, moveSpeed);
     }
 
@@ -143,13 +139,10 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void Jump()
     {
-        // Yerde olup olmadýðýmýzý kontrol etmek için bir raycast kullanarak groundCheck noktasýndan yere doðru bir çizgi çekiyoruz.
-        isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, .3f, groundLayer);
+        isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, jumpIsGroundedCheckDistance, groundLayer);
 
-        // Zýplama
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
         {
-            print("s");
             anim.SetTrigger("isJump");
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
         }

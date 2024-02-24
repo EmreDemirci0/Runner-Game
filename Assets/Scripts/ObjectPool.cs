@@ -44,7 +44,6 @@ public class ObjectPool : MonoBehaviour
         }
         #endregion
 
-        //Object Pool iþlemleri
         pooledObject = new Queue<GameObject>();
         for (int i = 0; i < poolSize; i++)
         {

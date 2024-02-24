@@ -6,14 +6,14 @@ public class FloorSetStart : MonoBehaviour
 {
     #region Fields
     /// <summary>
-    /// Sahnedeki itemlerin listeme atadýðým engellerden gelmesini istediðim itemleri koyacagimiz kisim
+    /// Sahnedeki itemlerin listeme atadigim engellerden gelmesini istedigim itemleri koyacagimiz kisim
     /// </summary>
     [SerializeField] private List<GameObject> items;
     #endregion 
 
     #region Methods
     /// <summary>
-    /// Listeden cekilen engellerin rastgele bir sekilde active olma alaný
+    /// Listeden cekilen engellerin rastgele bir sekilde active olma alani
     /// </summary>
     void Start()
     {

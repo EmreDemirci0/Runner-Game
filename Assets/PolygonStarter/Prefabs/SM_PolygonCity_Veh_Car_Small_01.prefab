@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4846673554447616}
   - component: {fileID: 33918600852461944}
   - component: {fileID: 23266439065948332}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_SteeringW
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 33646224532480520}
   - component: {fileID: 23889050435259212}
   - component: {fileID: 1734653330446148352}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 4780459556601488}
   - component: {fileID: 33659509810881646}
   - component: {fileID: 23713301760779848}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_Wheel_fl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 4116653647921868}
   - component: {fileID: 33927979128278762}
   - component: {fileID: 23229125549938102}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_Plates
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 4204578181419218}
   - component: {fileID: 33064757265718768}
   - component: {fileID: 23414387805680066}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_Wheel_rr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 4813707125328556}
   - component: {fileID: 33023303779726342}
   - component: {fileID: 23277122319696274}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_Wheel_rl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +538,7 @@ GameObject:
   - component: {fileID: 4833859032292464}
   - component: {fileID: 33856990407912484}
   - component: {fileID: 23531454878785312}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 4842651712186468}
   - component: {fileID: 33007231198472852}
   - component: {fileID: 23516394748360564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_PolygonCity_Veh_Car_Small_Wheel_fr
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,14 +13,14 @@ public class EternalFloor : MonoBehaviour
     public static EternalFloor Instance { get; private set; }
 
     /// <summary>
-    /// Object poolun kac saniyede bir kendini tekrarladigini tutan degisken, PlayerMovement icerisindeki moveSpeed ve buradaki objectZvalue degeri ile formul olusturulup, cýkan sonuc ilgili degerimiz oluyor.
+    /// Object poolun kac saniyede bir kendini tekrarladigini tutan degisken, PlayerMovement icerisindeki moveSpeed ve buradaki objectZvalue degeri ile formul olusturulup, cikan sonuc ilgili degerimiz oluyor.
     /// </summary>
-    [SerializeField]/**/ float spawnInterval;
+    float spawnInterval;
 
     /// <summary>
     /// Zeminimin Z ekseninde boyutu
     /// </summary>
-    public/**/ float objectZvalue;
+    float objectZvalue;
     #endregion
 
     #region Methods
@@ -43,10 +43,14 @@ public class EternalFloor : MonoBehaviour
     {
         objectZvalue = ObjectPool.Instance.objectPrefab.transform.GetChild(0).localScale.z;
         UpdateSpawnInternalValue();
-        SpawnInitialObjects(); // Tüm yollarý baþlangýçta yerleþtir
-        Invoke("WaitForSpawnInitialObjects", spawnInterval+ 5.06f);
+        SpawnInitialObjects();  
+        Invoke("WaitForSpawnInitialObjects", spawnInterval);
     }
 
+    private void Update()
+    {
+        UpdateSpawnInternalValue();
+    }
     /// <summary>
     /// Baslangicta hemen itemleri yuklemesin, bir partiyi start kisminda default ekledigimiz icin biraz delayli bir sekilde object pool ayarini yapan method
     /// </summary>
@@ -60,8 +64,8 @@ public class EternalFloor : MonoBehaviour
     /// </summary>
     public void UpdateSpawnInternalValue()
     {
-        //Bu Formul Objectpooldeki objelerin zeminin boyutuna ve hýzýmýza göre ayarlanmasýný saðlar.
-        spawnInterval = 5.06f / PlayerMovement.Instance.moveSpeed * objectZvalue;
+        //Bu Formul Objectpooldeki objelerin zeminin boyutuna ve hizimiza göre ayarlanmasýný saglar.
+        spawnInterval = 5.250f / PlayerMovement.Instance.moveSpeed * objectZvalue; //6->28   5.5 44 5.25 84
     }
     
     /// <summary>
@@ -69,7 +73,7 @@ public class EternalFloor : MonoBehaviour
     /// </summary>
     void SpawnInitialObjects()
     {
-        float totalZOffset = objectZvalue * 5;
+        float totalZOffset =0;
 
         for (int i = 0; i < ObjectPool.Instance.poolSize; i++)
         {
@@ -84,28 +88,38 @@ public class EternalFloor : MonoBehaviour
     /// </summary>
     IEnumerator SpawnObjects()
     {
-        float totalZOffset = ObjectPool.Instance.poolSize * objectZvalue * 5; // Baþlangýçta oluþturulan objelerin sonundan devam et
+        
+       
+        float totalZOffset = ObjectPool.Instance.poolSize * objectZvalue * 5; 
         GameObject lastObject = null;
 
         while (true)
         {
+
+            if (PlayerMovement.Instance.moveSpeed <=20 )
+            {
+                PlayerMovement.Instance.moveSpeed += .5f;
+                UpdateSpawnInternalValue();
+            }
+           
             GameObject obj = ObjectPool.Instance.GetPooledObject();
             obj.transform.position = new Vector3(0, 0, totalZOffset);
             totalZOffset += objectZvalue * 5;
 
-            // Karakterin geçtiði objenin en sona gitmesi için kontrol
+          
             if (lastObject != null && transform.position.z > lastObject.transform.position.z)
             {
-                // Son objeyi alarak yeni pozisyona yerleþtir
+           
                 lastObject.transform.position = new Vector3(0, 0, totalZOffset);
                 totalZOffset += objectZvalue * 5;
             }
 
-            // Son objeyi güncelle
+       
             lastObject = obj;
 
             yield return new WaitForSeconds(spawnInterval);
         }
+
     }
   
     #endregion
